@@ -1,57 +1,72 @@
-#include<iostream>
-#include<list>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-list<int> linput(list<int> l)
+class Node
 {
-    cout<<"enter the number of nodes"<<"\n";
-    int n;
-    cin>> n;
-    cout<<"enter the elements"<<"\n";
-    int temp;
-    for(int i=0 ;i<n;i++)
+public:
+    int data;
+    Node *next;
+};
+
+Node *reversek(Node *head, int k)
+{
+    Node *current = head;
+    Node *next = NULL;
+    Node *prev = NULL;
+    int count = 0;
+
+    while (current != NULL && count < k)
     {
-        cin>>temp;
-        l.push_back(temp);
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+        count++;
     }
-    return l;
+
+    if (next != NULL)
+        head->next = reversek(next, k);
+
+    return prev;
 }
 
-list<int> rev(list<int> l)
+void insert(Node **head, int val)
 {
-    list<int>::iterator it;
-    n = l.size();
-    cout<<"enter the value of k"<<"\n";
-    int k;
-    cin>>k;
-    list<int> tmp;
-    list<int> fin;
-    for(it = l.begin(); it<l.end();i+=k)
-    {
-        tmp = l.splice(l.begin(), l.begin()+1);
-        tmp.reverse();
-        fin.push_back(tmp);
-    }
-    if(it == l.end())
-        return fin;
-    else
-    {
-        tmp = l.splice(it, l.end());
-        tmp.reverse();
-        fin.push_back(tmp);
-    }
-    return fin;
+    Node *node = new Node();
+    node->data = val;
+    node->next = *head;
+    *head = node;
 }
 
-void main()
+void print(Node *node)
 {
-    list<int> l, fin;
-    l = linput(l);
-    fin = rev(l);
-    list<int>::iterator it;
-    for(it = l.begin(); it<l.end();i++)
+    while (node != NULL)
     {
-        print()
+        cout << node->data << " ";
+        node = node->next;
     }
+}
+
+int main()
+{
+    Node *head = NULL;
+    cout << "Enter Number of Values and K \n";
+    int n, k;
+    cin >> n >> k;
+
+    while (n--)
+    {
+        int val;
+        cin >> val;
+        insert(&head, val);
+    }
+
+    cout << "Given linked list \n";
+    print(head);
+    head = reversek(head, k);
+
+    cout << "\nReversed Linked list \n";
+    print(head);
+
+    return 0;
 }
